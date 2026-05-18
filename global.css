@@ -1,0 +1,118 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "nativewind/theme";
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+@theme {
+  /* Brand – Primary */
+  --color-lingua-purple: #6c4ef5;
+  --color-lingua-deep-purple: #5b3bf6;
+  --color-lingua-blue: #4d88ff;
+  --color-lingua-green: #21c16b;
+
+  /* Semantic */
+  --color-success: #21c16b;
+  --color-warning: #ffcb00;
+  --color-streak: #ff8a00;
+  --color-error: #ff4d4f;
+  --color-info: #4d88ff;
+
+  /* Neutrals */
+  --color-foreground: #001328;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-surface: #f6f7fb;
+  --color-background: #ffffff;
+
+  /* Font families (maps to fontFamily in React Native) */
+  --font-sans: Poppins-Regular;
+  --font-medium: Poppins-Medium;
+  --font-semibold: Poppins-SemiBold;
+  --font-bold: Poppins-Bold;
+}
+
+/* ─── Typography Utilities (BEM) ────────────────────────────── */
+@layer utilities {
+  /* H1 – Page / Screen Title: 32px Bold 1.2 */
+  .text-h1 {
+    font-size: 32px;
+    font-family: Poppins-Bold;
+    line-height: 38px;
+  }
+
+  /* H2 – Section Title: 24px SemiBold 1.3 */
+  .text-h2 {
+    font-size: 24px;
+    font-family: Poppins-SemiBold;
+    line-height: 31px;
+  }
+
+  /* H3 – Card / Module Title: 20px SemiBold 1.3 */
+  .text-h3 {
+    font-size: 20px;
+    font-family: Poppins-SemiBold;
+    line-height: 26px;
+  }
+
+  /* H4 – Subheading: 16px Medium 1.4 */
+  .text-h4 {
+    font-size: 16px;
+    font-family: Poppins-Medium;
+    line-height: 22px;
+  }
+
+  /* Body Large – Important content: 16px Regular 1.6 */
+  .text-body-lg {
+    font-size: 16px;
+    font-family: Poppins-Regular;
+    line-height: 26px;
+  }
+
+  /* Body Medium – Body text: 14px Regular 1.6 */
+  .text-body-md {
+    font-size: 14px;
+    font-family: Poppins-Regular;
+    line-height: 22px;
+  }
+
+  /* Body Small – Supporting text: 13px Regular 1.6 */
+  .text-body-sm {
+    font-size: 13px;
+    font-family: Poppins-Regular;
+    line-height: 21px;
+  }
+
+  /* Caption – Labels / meta: 11px Regular 1.4 */
+  .text-caption {
+    font-size: 11px;
+    font-family: Poppins-Regular;
+    line-height: 15px;
+  }
+
+  /* ─── Card Utilities ─────────────────────────────────────── */
+
+  /* card – white rounded card with soft padding */
+  .card {
+    border-radius: 16px;
+    background-color: #ffffff;
+    padding: 16px;
+  }
+
+  /* card--surface – off-white surface card */
+  .card--surface {
+    border-radius: 16px;
+    background-color: #f6f7fb;
+    padding: 16px;
+  }
+
+  /* card--bordered – card with border */
+  .card--bordered {
+    border-radius: 16px;
+    background-color: #ffffff;
+    border-width: 1px;
+    border-color: #e5e7eb;
+    padding: 16px;
+  }
+}
