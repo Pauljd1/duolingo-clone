@@ -17,12 +17,14 @@ import * as WebBrowser from "expo-web-browser";
 import { useSignUp, useSSO } from "@clerk/expo";
 import { images } from "@/constants/images";
 import VerificationModal from "@/components/VerificationModal";
+import { usePostHog } from "posthog-react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignUpScreen() {
   const { signUp, errors, fetchStatus } = useSignUp();
   const { startSSOFlow } = useSSO();
+  const posthog = usePostHog();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,6 +54,18 @@ export default function SignUpScreen() {
       await signUp.finalize({
         navigate: ({ session, decorateUrl }) => {
           if (session?.currentTask) return;
+          const userId = session?.user?.id;
+          const userEmail = session?.user?.primaryEmailAddress?.emailAddress;
+          if (userId) {
+            posthog.identify(userId, {
+              $set: { email: userEmail },
+              $set_once: { sign_up_date: new Date().toISOString() },
+            });
+          }
+          posthog.capture("user_signed_up", {
+            method: "email_password",
+            email: userEmail,
+          });
           const url = decorateUrl("/");
           router.replace(url.startsWith("http") ? "/" : (url as "/"));
         },
@@ -72,6 +86,7 @@ export default function SignUpScreen() {
   const handleSocialAuth = async (
     strategy: "oauth_google" | "oauth_facebook" | "oauth_apple"
   ) => {
+    posthog.capture("user_signed_up_via_sso", { strategy });
     try {
       const { createdSessionId, setActive } = await startSSOFlow({
         strategy,
