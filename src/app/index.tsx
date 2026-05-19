@@ -1,10 +1,11 @@
 import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Redirect } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { useAuth, useClerk } from "@clerk/expo";
 
 export default function Index() {
   const { isSignedIn, isLoaded } = useAuth();
   const { signOut } = useClerk();
+  const router = useRouter();
 
   if (!isLoaded) {
     return (
@@ -27,6 +28,13 @@ export default function Index() {
     <View style={styles.home}>
       <Text style={styles.title}>muolingo</Text>
       <Text style={styles.subtitle}>{"You're signed in! 🎉"}</Text>
+      <TouchableOpacity
+        style={styles.languageBtn}
+        onPress={() => router.push("/language-select")}
+        activeOpacity={0.85}
+      >
+        <Text style={styles.languageBtnText}>Choose a Language</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.signOutBtn} onPress={handleSignOut} activeOpacity={0.85}>
         <Text style={styles.signOutText}>Sign Out</Text>
       </TouchableOpacity>
@@ -58,7 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#6b7280",
   },
-  signOutBtn: {
+  languageBtn: {
     marginTop: 16,
     backgroundColor: "#6c4ef5",
     paddingHorizontal: 32,
@@ -67,9 +75,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderBottomColor: "#4a30d4",
   },
-  signOutText: {
+  languageBtnText: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 15,
     color: "#ffffff",
+  },
+  signOutBtn: {
+    backgroundColor: "#f6f7fb",
+    paddingHorizontal: 32,
+    paddingVertical: 14,
+    borderRadius: 14,
+  },
+  signOutText: {
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 15,
+    color: "#6b7280",
   },
 });
