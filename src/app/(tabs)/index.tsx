@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useUser } from "@clerk/expo";
+import { useUser, useAuth } from "@clerk/expo";
+import { useRouter } from "expo-router";
 
 import { useProgressStore } from "@/store/useProgressStore";
 import { getLanguageByCode } from "@/data/languages";
@@ -33,6 +34,8 @@ const TEACHER_PHOTO_URI = "https://i.pravatar.cc/120?img=47";
 
 export default function HomeScreen() {
   const { user } = useUser();
+  const { signOut } = useAuth();
+  const router = useRouter();
   const { selectedLanguage } = useProgressStore();
   const posthog = usePostHog();
 
@@ -102,6 +105,9 @@ export default function HomeScreen() {
             </View>
             <TouchableOpacity activeOpacity={0.7} hitSlop={8}>
               <Ionicons name="notifications-outline" size={24} color="#001328" />
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.7} hitSlop={8} onPress={() => signOut().then(() => router.replace("/onboarding"))}>
+              <Ionicons name="log-out-outline" size={24} color="#ef4444" />
             </TouchableOpacity>
           </View>
         </View>

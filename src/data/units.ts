@@ -73,6 +73,37 @@ export const units: Unit[] = [
     orderIndex: 1,
     lessonIds: ["pt-lesson-1", "pt-lesson-2", "pt-lesson-3"],
   },
+  {
+    id: "pt-unit-2",
+    languageCode: "pt",
+    title: "Daily Life",
+    description: "Restaurants, family, and getting around.",
+    color: "#FF9600",
+    orderIndex: 2,
+    lessonIds: ["pt-lesson-4", "pt-lesson-5", "pt-lesson-6"],
+  },
+
+  // ── Japanese — Unit 2 ──────────────────────────────────────────────────────
+  {
+    id: "ja-unit-2",
+    languageCode: "ja",
+    title: "Daily Life",
+    description: "Restaurants, family, and telling the time.",
+    color: "#FF9600",
+    orderIndex: 2,
+    lessonIds: ["ja-lesson-4", "ja-lesson-5", "ja-lesson-6"],
+  },
+
+  // ── German — Unit 2 ───────────────────────────────────────────────────────
+  {
+    id: "de-unit-2",
+    languageCode: "de",
+    title: "Daily Life",
+    description: "Restaurants, family, and shopping.",
+    color: "#FF9600",
+    orderIndex: 2,
+    lessonIds: ["de-lesson-4", "de-lesson-5", "de-lesson-6"],
+  },
 ];
 
 export function getUnitsByLanguage(languageCode: string): Unit[] {

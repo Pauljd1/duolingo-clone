@@ -1297,6 +1297,480 @@ export const lessons: Lesson[] = [
       },
     ],
   },
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // JAPANESE — Unit 2
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // ── ja-lesson-4 · At the Restaurant ──────────────────────────────────────
+  {
+    id: "ja-lesson-4",
+    unitId: "ja-unit-2",
+    languageCode: "ja",
+    title: "At the Restaurant",
+    description: "Order food and drinks at a Japanese restaurant.",
+    type: "phrases",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "ja-v-20", word: "メニュー", translation: "menu", phonetic: "menyū" },
+      { id: "ja-v-21", word: "おすすめ", translation: "recommendation / special", phonetic: "osusume" },
+      { id: "ja-v-22", word: "お水", translation: "water", phonetic: "omizu" },
+      { id: "ja-v-23", word: "おいしい", translation: "delicious", phonetic: "oishii" },
+      { id: "ja-v-24", word: "お会計", translation: "the bill / check", phonetic: "okaikei" },
+    ],
+    phrases: [
+      {
+        id: "ja-p-3",
+        phrase: "これをください。",
+        translation: "I'll have this, please.",
+        phonetic: "Kore wo kudasai.",
+      },
+      {
+        id: "ja-p-4",
+        phrase: "お会計をお願いします。",
+        translation: "Check, please.",
+        phonetic: "Okaikei wo onegaishimasu.",
+      },
+    ],
+    activities: [
+      {
+        type: "multiple_choice",
+        id: "ja-a-8",
+        prompt: "How do you say 'delicious'?",
+        options: ["おいしい", "おなか", "おみず", "おしごと"],
+        correctIndex: 0,
+      },
+      {
+        type: "translate",
+        id: "ja-a-9",
+        prompt: "Check, please.",
+        correctAnswer: "お会計をお願いします。",
+        hints: ["お会計", "を", "お願いします", "ください"],
+      },
+    ],
+    aiTeacherPrompt: {
+      systemPrompt:
+        "You are Yuki, a Japanese teacher. Role-play a restaurant scenario. Help the student order food using これをください and ask for the bill. Keep the conversation fun and practical.",
+      openingMessage:
+        "いらっしゃいませ！Welcome! Today we're practicing at a Japanese restaurant. I'm the waiter — ご注文はお決まりですか？ (Gochuumon wa okimari desu ka?) — Are you ready to order?",
+      teachingGoals: [
+        "Teach これをください for ordering",
+        "Introduce restaurant vocabulary: メニュー, おすすめ, おいしい",
+        "Teach お会計をお願いします for asking the bill",
+        "Complete a full ordering role-play",
+      ],
+    },
+  },
+
+  // ── ja-lesson-5 · Family ──────────────────────────────────────────────────
+  {
+    id: "ja-lesson-5",
+    unitId: "ja-unit-2",
+    languageCode: "ja",
+    title: "Family",
+    description: "Talk about family members in Japanese.",
+    type: "vocabulary",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "ja-v-25", word: "お母さん", translation: "mother", phonetic: "okāsan" },
+      { id: "ja-v-26", word: "お父さん", translation: "father", phonetic: "otōsan" },
+      { id: "ja-v-27", word: "兄 (あに)", translation: "older brother", phonetic: "ani" },
+      { id: "ja-v-28", word: "姉 (あね)", translation: "older sister", phonetic: "ane" },
+      { id: "ja-v-29", word: "家族 (かぞく)", translation: "family", phonetic: "kazoku" },
+    ],
+    phrases: [
+      {
+        id: "ja-p-5",
+        phrase: "家族は四人です。",
+        translation: "There are four people in my family.",
+        phonetic: "Kazoku wa yonin desu.",
+      },
+    ],
+    activities: [
+      {
+        type: "multiple_choice",
+        id: "ja-a-10",
+        prompt: "What does 'お母さん' mean?",
+        options: ["father", "mother", "sister", "brother"],
+        correctIndex: 1,
+      },
+      {
+        type: "match_pairs",
+        id: "ja-a-11",
+        pairs: [
+          { left: "お母さん", right: "mother" },
+          { left: "お父さん", right: "father" },
+          { left: "兄", right: "older brother" },
+          { left: "姉", right: "older sister" },
+        ],
+      },
+    ],
+  },
+
+  // ── ja-lesson-6 · Time & Dates ────────────────────────────────────────────
+  {
+    id: "ja-lesson-6",
+    unitId: "ja-unit-2",
+    languageCode: "ja",
+    title: "Time & Dates",
+    description: "Ask and tell the time in Japanese.",
+    type: "vocabulary",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "ja-v-30", word: "今、何時ですか？", translation: "What time is it now?", phonetic: "Ima, nanji desu ka?" },
+      { id: "ja-v-31", word: "〜時 (じ)", translation: "o'clock", phonetic: "~ji" },
+      { id: "ja-v-32", word: "午前 (ごぜん)", translation: "AM / morning", phonetic: "gozen" },
+      { id: "ja-v-33", word: "午後 (ごご)", translation: "PM / afternoon", phonetic: "gogo" },
+      { id: "ja-v-34", word: "〜分 (ふん)", translation: "minutes", phonetic: "~fun" },
+    ],
+    phrases: [
+      {
+        id: "ja-p-6",
+        phrase: "三時です。",
+        translation: "It is three o'clock.",
+        phonetic: "Sanji desu.",
+      },
+    ],
+    activities: [
+      {
+        type: "multiple_choice",
+        id: "ja-a-12",
+        prompt: "What does '午前' mean?",
+        options: ["PM / afternoon", "evening", "AM / morning", "night"],
+        correctIndex: 2,
+      },
+      {
+        type: "translate",
+        id: "ja-a-13",
+        prompt: "It is three o'clock.",
+        correctAnswer: "三時です。",
+        hints: ["三時", "です", "四時", "二時"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // GERMAN — Unit 2
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // ── de-lesson-4 · At the Restaurant ──────────────────────────────────────
+  {
+    id: "de-lesson-4",
+    unitId: "de-unit-2",
+    languageCode: "de",
+    title: "At the Restaurant",
+    description: "Order food and ask for the bill in German.",
+    type: "phrases",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "de-v-20", word: "die Speisekarte", translation: "the menu", phonetic: "dee SHPY-zeh-kar-teh" },
+      { id: "de-v-21", word: "das Wasser", translation: "water", phonetic: "dahs VAH-ser" },
+      { id: "de-v-22", word: "das Brot", translation: "bread", phonetic: "dahs broht" },
+      { id: "de-v-23", word: "lecker", translation: "delicious / tasty", phonetic: "LEK-er" },
+      { id: "de-v-24", word: "die Rechnung", translation: "the bill", phonetic: "dee RECH-nung" },
+    ],
+    phrases: [
+      {
+        id: "de-p-3",
+        phrase: "Ich hätte gern...",
+        translation: "I would like...",
+        phonetic: "ikh HEH-teh gehrn",
+      },
+      {
+        id: "de-p-4",
+        phrase: "Die Rechnung, bitte.",
+        translation: "The bill, please.",
+        phonetic: "dee RECH-nung, BIT-teh",
+      },
+    ],
+    activities: [
+      {
+        type: "multiple_choice",
+        id: "de-a-7",
+        prompt: "How do you ask for the bill?",
+        options: ["Danke schön.", "Die Rechnung, bitte.", "Guten Appetit.", "Prost!"],
+        correctIndex: 1,
+      },
+      {
+        type: "translate",
+        id: "de-a-8",
+        prompt: "I would like water, please.",
+        correctAnswer: "Ich hätte gern Wasser, bitte.",
+        hints: ["Ich", "hätte", "gern", "Wasser", "bitte"],
+      },
+    ],
+    aiTeacherPrompt: {
+      systemPrompt:
+        "You are Max, a German teacher. Role-play a restaurant scene. Help the student order using 'Ich hätte gern' and ask for the bill. Be encouraging and correct mistakes gently.",
+      openingMessage:
+        "Willkommen im Restaurant! Today we'll practice ordering in German. I'll be the waiter — Was darf es sein? What would you like?",
+      teachingGoals: [
+        "Teach Ich hätte gern + item",
+        "Introduce vocabulary: Speisekarte, Wasser, Brot, lecker",
+        "Teach Die Rechnung, bitte",
+        "Complete a restaurant role-play",
+      ],
+    },
+  },
+
+  // ── de-lesson-5 · Family ──────────────────────────────────────────────────
+  {
+    id: "de-lesson-5",
+    unitId: "de-unit-2",
+    languageCode: "de",
+    title: "Family",
+    description: "Talk about your family in German.",
+    type: "vocabulary",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "de-v-25", word: "die Mutter", translation: "mother", phonetic: "dee MUT-ter" },
+      { id: "de-v-26", word: "der Vater", translation: "father", phonetic: "dehr FAH-ter" },
+      { id: "de-v-27", word: "der Bruder", translation: "brother", phonetic: "dehr BROO-der" },
+      { id: "de-v-28", word: "die Schwester", translation: "sister", phonetic: "dee SHVES-ter" },
+      { id: "de-v-29", word: "die Familie", translation: "family", phonetic: "dee fah-MEE-lyeh" },
+    ],
+    phrases: [
+      {
+        id: "de-p-5",
+        phrase: "Ich habe einen Bruder.",
+        translation: "I have a brother.",
+        phonetic: "ikh HAH-beh EYE-nen BROO-der",
+      },
+      {
+        id: "de-p-6",
+        phrase: "Hast du Geschwister?",
+        translation: "Do you have siblings?",
+        phonetic: "hahst doo geh-SHVIS-ter",
+      },
+    ],
+    activities: [
+      {
+        type: "match_pairs",
+        id: "de-a-9",
+        pairs: [
+          { left: "die Mutter", right: "mother" },
+          { left: "der Vater", right: "father" },
+          { left: "der Bruder", right: "brother" },
+          { left: "die Schwester", right: "sister" },
+        ],
+      },
+      {
+        type: "multiple_choice",
+        id: "de-a-10",
+        prompt: "How do you say 'family' in German?",
+        options: ["der Freund", "die Familie", "der Bruder", "die Mutter"],
+        correctIndex: 1,
+      },
+    ],
+  },
+
+  // ── de-lesson-6 · Shopping ────────────────────────────────────────────────
+  {
+    id: "de-lesson-6",
+    unitId: "de-unit-2",
+    languageCode: "de",
+    title: "Shopping",
+    description: "Shop and ask about prices in German.",
+    type: "phrases",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "de-v-30", word: "das Geschäft", translation: "the shop / store", phonetic: "dahs geh-SHEFT" },
+      { id: "de-v-31", word: "Was kostet das?", translation: "How much does this cost?", phonetic: "vahs KOS-tet dahs" },
+      { id: "de-v-32", word: "teuer", translation: "expensive", phonetic: "TOY-er" },
+      { id: "de-v-33", word: "billig", translation: "cheap", phonetic: "BIL-ikh" },
+      { id: "de-v-34", word: "Ich nehme das.", translation: "I'll take it.", phonetic: "ikh NEH-meh dahs" },
+    ],
+    phrases: [
+      {
+        id: "de-p-7",
+        phrase: "Haben Sie das in einer anderen Größe?",
+        translation: "Do you have this in another size?",
+        phonetic: "HAH-ben zee dahs in EYE-ner AN-deh-ren GROH-seh",
+      },
+    ],
+    activities: [
+      {
+        type: "multiple_choice",
+        id: "de-a-11",
+        prompt: "How do you ask 'How much does this cost?'",
+        options: ["Das ist teuer.", "Was kostet das?", "Ich nehme das.", "Wo ist das Geschäft?"],
+        correctIndex: 1,
+      },
+      {
+        type: "translate",
+        id: "de-a-12",
+        prompt: "I'll take it.",
+        correctAnswer: "Ich nehme das.",
+        hints: ["Ich", "nehme", "das", "kaufe", "habe"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // PORTUGUESE — Unit 2
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // ── pt-lesson-4 · At the Restaurant ──────────────────────────────────────
+  {
+    id: "pt-lesson-4",
+    unitId: "pt-unit-2",
+    languageCode: "pt",
+    title: "At the Restaurant",
+    description: "Order food and drinks at a Brazilian restaurant.",
+    type: "phrases",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "pt-v-18", word: "o cardápio", translation: "the menu", phonetic: "oo kar-DAH-pyoo" },
+      { id: "pt-v-19", word: "a água", translation: "water", phonetic: "ah AH-gwah" },
+      { id: "pt-v-20", word: "gostoso / gostosa", translation: "tasty / delicious", phonetic: "goh-STOH-zoo / goh-STOH-zah" },
+      { id: "pt-v-21", word: "a conta", translation: "the bill", phonetic: "ah KON-tah" },
+      { id: "pt-v-22", word: "o prato do dia", translation: "today's special", phonetic: "oo PRAH-too doo JEE-ah" },
+    ],
+    phrases: [
+      {
+        id: "pt-p-3",
+        phrase: "Eu quero isso, por favor.",
+        translation: "I want this, please.",
+        phonetic: "eoo KER-oo EE-soo, por fah-VOR",
+      },
+      {
+        id: "pt-p-4",
+        phrase: "A conta, por favor.",
+        translation: "The bill, please.",
+        phonetic: "ah KON-tah, por fah-VOR",
+      },
+    ],
+    activities: [
+      {
+        type: "multiple_choice",
+        id: "pt-a-7",
+        prompt: "How do you ask for the bill?",
+        options: ["Obrigado!", "A conta, por favor.", "Tudo bem?", "Bom dia!"],
+        correctIndex: 1,
+      },
+      {
+        type: "translate",
+        id: "pt-a-8",
+        prompt: "I want this, please.",
+        correctAnswer: "Eu quero isso, por favor.",
+        hints: ["Eu", "quero", "isso", "por favor", "obrigado"],
+      },
+    ],
+    aiTeacherPrompt: {
+      systemPrompt:
+        "You are Ana, a Brazilian Portuguese teacher. Role-play a restaurant scenario. Teach the student to order food and ask for the bill. Keep the energy warm and fun — Brazilian Portuguese style!",
+      openingMessage:
+        "Oi! Bem-vindo ao restaurante! Today we practice ordering food in Portuguese. I'll be your waiter — O que você vai querer? What would you like?",
+      teachingGoals: [
+        "Teach Eu quero + item + por favor",
+        "Introduce vocabulary: cardápio, água, gostoso, conta",
+        "Teach A conta, por favor",
+        "Complete a full restaurant role-play",
+      ],
+    },
+  },
+
+  // ── pt-lesson-5 · Family ──────────────────────────────────────────────────
+  {
+    id: "pt-lesson-5",
+    unitId: "pt-unit-2",
+    languageCode: "pt",
+    title: "Family",
+    description: "Talk about your family in Portuguese.",
+    type: "vocabulary",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "pt-v-23", word: "a mãe", translation: "mother", phonetic: "ah mahn" },
+      { id: "pt-v-24", word: "o pai", translation: "father", phonetic: "oo py" },
+      { id: "pt-v-25", word: "o irmão", translation: "brother", phonetic: "oo eer-MAHN" },
+      { id: "pt-v-26", word: "a irmã", translation: "sister", phonetic: "ah eer-MAH" },
+      { id: "pt-v-27", word: "a família", translation: "family", phonetic: "ah fah-MEE-lyah" },
+    ],
+    phrases: [
+      {
+        id: "pt-p-5",
+        phrase: "Tenho dois irmãos.",
+        translation: "I have two brothers.",
+        phonetic: "TEHN-yoo doysh eer-MAHNS",
+      },
+      {
+        id: "pt-p-6",
+        phrase: "Você tem irmãos?",
+        translation: "Do you have siblings?",
+        phonetic: "voh-SAY tehm eer-MAHNS",
+      },
+    ],
+    activities: [
+      {
+        type: "match_pairs",
+        id: "pt-a-9",
+        pairs: [
+          { left: "a mãe", right: "mother" },
+          { left: "o pai", right: "father" },
+          { left: "o irmão", right: "brother" },
+          { left: "a irmã", right: "sister" },
+        ],
+      },
+      {
+        type: "multiple_choice",
+        id: "pt-a-10",
+        prompt: "How do you say 'family' in Portuguese?",
+        options: ["o amigo", "a família", "o irmão", "a mãe"],
+        correctIndex: 1,
+      },
+    ],
+  },
+
+  // ── pt-lesson-6 · Travel ──────────────────────────────────────────────────
+  {
+    id: "pt-lesson-6",
+    unitId: "pt-unit-2",
+    languageCode: "pt",
+    title: "Travel",
+    description: "Navigate transportation and ask for directions in Portuguese.",
+    type: "phrases",
+    xpReward: 15,
+    estimatedMinutes: 7,
+    vocabulary: [
+      { id: "pt-v-28", word: "o aeroporto", translation: "the airport", phonetic: "oo ah-eh-roh-POR-too" },
+      { id: "pt-v-29", word: "o ônibus", translation: "the bus", phonetic: "oo OH-nee-boos" },
+      { id: "pt-v-30", word: "Onde é...?", translation: "Where is...?", phonetic: "ON-jeh eh" },
+      { id: "pt-v-31", word: "à direita", translation: "to the right", phonetic: "ah dee-RAY-tah" },
+      { id: "pt-v-32", word: "à esquerda", translation: "to the left", phonetic: "ah ehs-KEHR-dah" },
+    ],
+    phrases: [
+      {
+        id: "pt-p-7",
+        phrase: "Onde fica a estação de metrô?",
+        translation: "Where is the subway station?",
+        phonetic: "ON-jeh FEE-kah ah ehs-tah-SAHN jeh meh-TROH",
+      },
+    ],
+    activities: [
+      {
+        type: "multiple_choice",
+        id: "pt-a-11",
+        prompt: "What does 'à esquerda' mean?",
+        options: ["to the right", "straight ahead", "to the left", "behind"],
+        correctIndex: 2,
+      },
+      {
+        type: "translate",
+        id: "pt-a-12",
+        prompt: "Where is the airport?",
+        correctAnswer: "Onde é o aeroporto?",
+        hints: ["Onde", "é", "o", "aeroporto", "ônibus"],
+      },
+    ],
+  },
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
