@@ -1,8 +1,8 @@
 import { images } from "@/constants/images";
+import { useAuth } from "@clerk/expo";
 import { Redirect, Stack, router } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@clerk/expo";
 
 export default function OnboardingScreen() {
   const { isSignedIn, isLoaded } = useAuth();

@@ -1,18 +1,20 @@
+import { images } from "@/constants/images";
+import { languages } from "@/data/languages";
+import type { Language } from "@/types/learning";
+import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
+import { useProgressStore } from "@/store/useProgressStore";
+import type { LanguageCode } from "@/types/learning";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
   FlatList,
   Image,
   StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Stack, useRouter } from "expo-router";
-import { languages } from "@/data/languages";
-import { images } from "@/constants/images";
-import type { Language } from "@/types/learning";
 
 // ─── Language Row ─────────────────────────────────────────────────────────────
 
@@ -62,19 +64,21 @@ function LanguageRow({
 
 export default function LanguageSelectScreen() {
   const router = useRouter();
-  const [selectedCode, setSelectedCode] = useState<string | null>(null);
+  const { selectedLanguage, setSelectedLanguage } = useProgressStore();
+  const [selectedCode, setSelectedCode] = useState<LanguageCode | null>(selectedLanguage);
   const [search, setSearch] = useState("");
 
   const filtered = languages.filter(
     (l) =>
       l.name.toLowerCase().includes(search.toLowerCase()) ||
-      l.nativeName.toLowerCase().includes(search.toLowerCase())
+      l.nativeName.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleConfirm = () => {
     if (!selectedCode) return;
-    // TODO: persist to Zustand store when implemented
-    router.back();
+    setSelectedLanguage(selectedCode);
+    // Replace so the user cannot press back into language selection from home
+    router.replace("/");
   };
 
   return (
@@ -90,7 +94,10 @@ export default function LanguageSelectScreen() {
         >
           <Text style={styles.backArrow}>‹</Text>
         </TouchableOpacity>
-        <Text className="flex-1 text-center text-foreground" style={styles.headerTitle}>
+        <Text
+          className="flex-1 text-center text-foreground"
+          style={styles.headerTitle}
+        >
           Choose a language
         </Text>
         {/* Spacer to balance the back button */}
@@ -121,7 +128,10 @@ export default function LanguageSelectScreen() {
         keyExtractor={(item) => item.code}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <Text className="text-foreground px-4 mb-3" style={styles.sectionLabel}>
+          <Text
+            className="text-foreground px-4 mb-3"
+            style={styles.sectionLabel}
+          >
             Popular
           </Text>
         }
