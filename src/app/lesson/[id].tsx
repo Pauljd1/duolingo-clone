@@ -8,61 +8,51 @@ import {
   Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useProgressStore } from "@/store/useProgressStore";
+import { getLessonById } from "@/data/lessons";
 import { getLanguageByCode } from "@/data/languages";
-import { getLessonById, getLessonsByLanguage } from "@/data/lessons";
 import { images } from "@/constants/images";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_SIZE = SCREEN_WIDTH - 36;
 
-export default function AITeacherScreen() {
+export default function LessonScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { selectedLanguage, inProgressLessonId } = useProgressStore();
 
-  const lang = selectedLanguage ? getLanguageByCode(selectedLanguage) : null;
-
-  // Use in-progress lesson if available, otherwise the first lesson of the language.
-  const allLessons = selectedLanguage ? getLessonsByLanguage(selectedLanguage) : [];
-  const lesson =
-    (inProgressLessonId ? getLessonById(inProgressLessonId) : null) ??
-    allLessons[0] ??
-    null;
+  const lesson = getLessonById(id as string);
+  const lang = lesson ? getLanguageByCode(lesson.languageCode) : null;
 
   const [isMuted, setIsMuted] = useState(false);
   const [showSubtitles, setShowSubtitles] = useState(false);
 
-  const teacherMessage =
-    lesson?.aiTeacherPrompt?.openingMessage ??
-    (lang
-      ? `Ready to learn ${lang.name}? Let's start your lesson!`
-      : "Select a language to start your AI lesson.");
-
-  const firstSentenceEnd = teacherMessage.search(/[.!?]/);
-  const bubbleText =
-    firstSentenceEnd !== -1
-      ? teacherMessage.slice(0, firstSentenceEnd + 1)
-      : teacherMessage.slice(0, 64);
-
-  if (!lang) {
+  if (!lesson || !lang) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f6ff" }}>
-        <View style={styles.emptyState}>
-          <Image source={images.mascot} style={styles.emptyMascot} resizeMode="contain" />
-          <Text style={styles.emptyTitle}>No language selected</Text>
-          <Text style={styles.emptySubtitle}>
-            Go to Home and pick a language to start your AI lesson.
-          </Text>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle-outline" size={52} color="#c4b5fd" />
+          <Text style={styles.errorText}>Lesson not found.</Text>
         </View>
       </SafeAreaView>
     );
   }
 
+  const teacherMessage =
+    lesson.aiTeacherPrompt?.openingMessage ??
+    `Let's learn ${lang.name} together! I'm your AI teacher.`;
+
+  // Trim opening message to the first sentence for the bubble.
+  const firstSentenceEnd = teacherMessage.search(/[.!?]/);
+  const bubbleText =
+    firstSentenceEnd !== -1
+      ? teacherMessage.slice(0, firstSentenceEnd + 1)
+      : teacherMessage.slice(0, 60);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+      <Stack.Screen options={{ headerShown: false }} />
       {/* ── Header ── */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -127,11 +117,9 @@ export default function AITeacherScreen() {
         <Text style={styles.sessionLang}>
           {lang.flag}{"  "}{lang.name}
         </Text>
-        {lesson && (
-          <Text style={styles.sessionTitle} numberOfLines={1}>
-            {lesson.title}
-          </Text>
-        )}
+        <Text style={styles.sessionTitle} numberOfLines={1}>
+          {lesson.title}
+        </Text>
       </View>
 
       {/* ── Controls ── */}
@@ -159,17 +147,23 @@ export default function AITeacherScreen() {
       <View style={styles.feedbackCard}>
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Speaking</Text>
-          <Text style={[styles.feedbackValue, { color: "#21c16b" }]}>Excellent</Text>
+          <Text style={[styles.feedbackValue, { color: "#21c16b" }]}>
+            Excellent
+          </Text>
         </View>
         <View style={styles.feedbackDivider} />
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Pronunciation</Text>
-          <Text style={[styles.feedbackValue, { color: "#4d88ff" }]}>Great</Text>
+          <Text style={[styles.feedbackValue, { color: "#4d88ff" }]}>
+            Great
+          </Text>
         </View>
         <View style={styles.feedbackDivider} />
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Grammar</Text>
-          <Text style={[styles.feedbackValue, { color: "#ff8a00" }]}>Good</Text>
+          <Text style={[styles.feedbackValue, { color: "#ff8a00" }]}>
+            Good
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -186,9 +180,19 @@ type ControlButtonProps = {
   dimmed?: boolean;
 };
 
-function ControlButton({ icon, label, onPress, isEndCall, dimmed }: ControlButtonProps) {
+function ControlButton({
+  icon,
+  label,
+  onPress,
+  isEndCall,
+  dimmed,
+}: ControlButtonProps) {
   return (
-    <TouchableOpacity style={styles.ctrlWrap} onPress={onPress} activeOpacity={0.75}>
+    <TouchableOpacity
+      style={styles.ctrlWrap}
+      onPress={onPress}
+      activeOpacity={0.75}
+    >
       <View
         style={[
           styles.ctrlBtn,
@@ -210,9 +214,19 @@ function ControlButton({ icon, label, onPress, isEndCall, dimmed }: ControlButto
 
 // ── SubtitlesButton ───────────────────────────────────────────────────────────
 
-function SubtitlesButton({ active, onPress }: { active: boolean; onPress: () => void }) {
+function SubtitlesButton({
+  active,
+  onPress,
+}: {
+  active: boolean;
+  onPress: () => void;
+}) {
   return (
-    <TouchableOpacity style={styles.ctrlWrap} onPress={onPress} activeOpacity={0.75}>
+    <TouchableOpacity
+      style={styles.ctrlWrap}
+      onPress={onPress}
+      activeOpacity={0.75}
+    >
       <View style={[styles.ctrlBtn, !active && styles.ctrlBtnDimmed]}>
         <Text style={styles.subtitlesText}>Aa</Text>
       </View>
@@ -224,29 +238,16 @@ function SubtitlesButton({ active, onPress }: { active: boolean; onPress: () => 
 // ── Styles ────────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
-  emptyState: {
+  errorContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 32,
     gap: 12,
   },
-  emptyMascot: {
-    width: 120,
-    height: 120,
-    marginBottom: 8,
-  },
-  emptyTitle: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 18,
-    color: "#001328",
-  },
-  emptySubtitle: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 14,
+  errorText: {
+    fontFamily: "Poppins-Medium",
+    fontSize: 16,
     color: "#6b7280",
-    textAlign: "center",
-    lineHeight: 22,
   },
 
   // Header
