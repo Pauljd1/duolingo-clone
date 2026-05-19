@@ -8,20 +8,33 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   visible: boolean;
   email: string;
+  onVerify: (code: string) => Promise<void>;
+  onResend: () => Promise<void>;
   onClose: () => void;
+  error?: string | null;
+  isLoading?: boolean;
 }
 
-export default function VerificationModal({ visible, email, onClose }: Props) {
+export default function VerificationModal({
+  visible,
+  email,
+  onVerify,
+  onResend,
+  onClose,
+  error,
+  isLoading = false,
+}: Props) {
   const [code, setCode] = useState("");
   const inputRef = useRef<TextInput>(null);
 
+  // Focus the hidden input when modal opens
   useEffect(() => {
     if (visible) {
       setCode("");
@@ -30,18 +43,29 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
     }
   }, [visible]);
 
+  // Auto-submit when 6 digits are entered
   useEffect(() => {
-    if (code.length === 6) {
-      const timer = setTimeout(() => {
-        onClose();
-        router.replace("/");
-      }, 300);
-      return () => clearTimeout(timer);
+    if (code.length === 6 && !isLoading) {
+      onVerify(code);
     }
-  }, [code, onClose]);
+  }, [code]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Clear code when an error comes back so the user can retype
+  useEffect(() => {
+    if (error) {
+      setCode("");
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [error]);
 
   const handleCodeChange = (text: string) => {
     setCode(text.replace(/[^0-9]/g, "").slice(0, 6));
+  };
+
+  const handleResend = async () => {
+    setCode("");
+    await onResend();
+    setTimeout(() => inputRef.current?.focus(), 200);
   };
 
   return (
@@ -56,20 +80,19 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.kav}
         >
-          {/* Dismiss area */}
           <TouchableOpacity style={styles.dismissArea} onPress={onClose} />
 
-          {/* Sheet */}
           <View style={styles.sheet}>
-            {/* Handle */}
             <View style={styles.handle} />
 
-            {/* Close button */}
-            <TouchableOpacity style={styles.closeBtn} onPress={onClose} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={onClose}
+              activeOpacity={0.7}
+            >
               <Ionicons name="close" size={22} color="#6b7280" />
             </TouchableOpacity>
 
-            {/* Email icon */}
             <View style={styles.iconCircle}>
               <Ionicons name="mail-outline" size={32} color="#6c4ef5" />
             </View>
@@ -80,7 +103,7 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
               <Text style={styles.emailText}>{email}</Text>
             </Text>
 
-            {/* OTP boxes — tap to focus hidden input */}
+            {/* OTP digit boxes — tap anywhere to focus the hidden input */}
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => inputRef.current?.focus()}
@@ -96,15 +119,33 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
                       styles.digitBox,
                       digit ? styles.digitFilled : styles.digitEmpty,
                       isActive && styles.digitActive,
+                      !!error && styles.digitError,
                     ]}
                   >
-                    <Text style={styles.digitText}>{digit || ""}</Text>
+                    {isLoading && i === 0 && !digit ? (
+                      <ActivityIndicator size="small" color="#6c4ef5" />
+                    ) : (
+                      <Text style={styles.digitText}>{digit || ""}</Text>
+                    )}
                   </View>
                 );
               })}
             </TouchableOpacity>
 
-            {/* Hidden TextInput captures keyboard input */}
+            {/* Error message */}
+            {!!error && (
+              <Text style={styles.errorText}>{error}</Text>
+            )}
+
+            {/* Loading indicator during verification */}
+            {isLoading && (
+              <View style={styles.loadingRow}>
+                <ActivityIndicator size="small" color="#6c4ef5" />
+                <Text style={styles.loadingText}>Verifying…</Text>
+              </View>
+            )}
+
+            {/* Hidden TextInput receives keyboard input */}
             <TextInput
               ref={inputRef}
               value={code}
@@ -113,12 +154,13 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
               maxLength={6}
               style={styles.hiddenInput}
               caretHidden
+              editable={!isLoading}
             />
 
-            {/* Resend */}
             <TouchableOpacity
-              onPress={() => setCode("")}
+              onPress={handleResend}
               activeOpacity={0.7}
+              disabled={isLoading}
               style={styles.resendRow}
             >
               <Text style={styles.resendText}>
@@ -225,10 +267,32 @@ const styles = StyleSheet.create({
     borderColor: "#6c4ef5",
     backgroundColor: "#f0ecff",
   },
+  digitError: {
+    borderColor: "#ff4d4f",
+  },
   digitText: {
     fontFamily: "Poppins-Bold",
     fontSize: 22,
     color: "#001328",
+  },
+  errorText: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 13,
+    color: "#ff4d4f",
+    textAlign: "center",
+    marginTop: 8,
+    paddingHorizontal: 8,
+  },
+  loadingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 12,
+  },
+  loadingText: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 13,
+    color: "#6b7280",
   },
   hiddenInput: {
     position: "absolute",

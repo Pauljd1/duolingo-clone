@@ -13,12 +13,83 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import * as WebBrowser from "expo-web-browser";
+import { useSignIn, useSSO } from "@clerk/expo";
 import { images } from "@/constants/images";
 import VerificationModal from "@/components/VerificationModal";
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function SignInScreen() {
+  const { signIn, errors, fetchStatus } = useSignIn();
+  const { startSSOFlow } = useSSO();
+
   const [email, setEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [verifyError, setVerifyError] = useState<string | null>(null);
+
+  const isSubmitting = fetchStatus === "fetching" && !modalVisible;
+  const isVerifying = fetchStatus === "fetching" && modalVisible;
+
+  // Sign in with email OTP — requires "Email verification code" enabled in Clerk Dashboard
+  // (User & Authentication > Email, Phone, Username > Email address > Verification)
+  const handleSignIn = async () => {
+    const { error } = await signIn.emailCode.sendCode({ emailAddress: email });
+    if (error) return;
+    setVerifyError(null);
+    setModalVisible(true);
+  };
+
+  const handleVerify = async (code: string) => {
+    setVerifyError(null);
+    const { error } = await signIn.emailCode.verifyCode({ code });
+    if (error) {
+      setVerifyError(error.longMessage ?? error.message);
+      return;
+    }
+    if (signIn.status === "complete") {
+      await signIn.finalize({
+        navigate: ({ session, decorateUrl }) => {
+          if (session?.currentTask) return;
+          const url = decorateUrl("/");
+          router.replace(url.startsWith("http") ? "/" : (url as "/"));
+        },
+      });
+    }
+  };
+
+  const handleResend = async () => {
+    setVerifyError(null);
+    await signIn.emailCode.sendCode({ emailAddress: email });
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setVerifyError(null);
+  };
+
+  const handleSocialAuth = async (
+    strategy: "oauth_google" | "oauth_facebook" | "oauth_apple"
+  ) => {
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy,
+        redirectUrl: "duolingoclone://oauth-callback",
+      });
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+        router.replace("/");
+      }
+    } catch (err) {
+      console.error("SSO error:", err);
+    }
+  };
+
+  const emailError =
+    errors?.fields?.identifier?.message ??
+    errors?.global?.[0]?.longMessage ??
+    errors?.global?.[0]?.message ??
+    null;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,16 +143,22 @@ export default function SignInScreen() {
                 style={styles.inputText}
               />
             </View>
+            {!!emailError && (
+              <Text style={styles.fieldError}>{emailError}</Text>
+            )}
           </View>
 
           {/* Sign In button */}
           <View className="px-6 mt-6">
             <TouchableOpacity
-              style={styles.primaryBtn}
+              style={[styles.primaryBtn, isSubmitting && styles.primaryBtnDisabled]}
               activeOpacity={0.85}
-              onPress={() => setModalVisible(true)}
+              onPress={handleSignIn}
+              disabled={isSubmitting || !email}
             >
-              <Text style={styles.primaryBtnText}>Sign In</Text>
+              <Text style={styles.primaryBtnText}>
+                {isSubmitting ? "Sending code…" : "Sign In"}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -97,14 +174,17 @@ export default function SignInScreen() {
             <SocialButton
               icon={<FontAwesome5 name="google" size={20} color="#EA4335" brand />}
               label="Continue with Google"
+              onPress={() => handleSocialAuth("oauth_google")}
             />
             <SocialButton
               icon={<FontAwesome5 name="facebook" size={20} color="#1877F2" brand />}
               label="Continue with Facebook"
+              onPress={() => handleSocialAuth("oauth_facebook")}
             />
             <SocialButton
               icon={<FontAwesome5 name="apple" size={22} color="#000000" brand />}
               label="Continue with Apple"
+              onPress={() => handleSocialAuth("oauth_apple")}
             />
           </View>
 
@@ -113,7 +193,10 @@ export default function SignInScreen() {
             <Text className="text-body-sm text-muted">
               {"Don't have an account? "}
             </Text>
-            <TouchableOpacity onPress={() => router.replace("/(auth)/sign-up")} activeOpacity={0.7}>
+            <TouchableOpacity
+              onPress={() => router.replace("/(auth)/sign-up")}
+              activeOpacity={0.7}
+            >
               <Text className="text-body-sm text-lingua-purple font-semibold">
                 Sign up
               </Text>
@@ -125,15 +208,27 @@ export default function SignInScreen() {
       <VerificationModal
         visible={modalVisible}
         email={email || "your email"}
-        onClose={() => setModalVisible(false)}
+        onVerify={handleVerify}
+        onResend={handleResend}
+        onClose={handleCloseModal}
+        error={verifyError}
+        isLoading={isVerifying}
       />
     </SafeAreaView>
   );
 }
 
-function SocialButton({ icon, label }: { icon: React.ReactNode; label: string }) {
+function SocialButton({
+  icon,
+  label,
+  onPress,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onPress: () => void;
+}) {
   return (
-    <TouchableOpacity style={styles.socialBtn} activeOpacity={0.75}>
+    <TouchableOpacity style={styles.socialBtn} activeOpacity={0.75} onPress={onPress}>
       <View style={styles.socialIcon}>{icon}</View>
       <Text style={styles.socialLabel}>{label}</Text>
     </TouchableOpacity>
@@ -183,6 +278,13 @@ const styles = StyleSheet.create({
     color: "#001328",
     padding: 0,
   },
+  fieldError: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 12,
+    color: "#ff4d4f",
+    marginTop: 4,
+    marginLeft: 4,
+  },
   primaryBtn: {
     backgroundColor: "#6c4ef5",
     borderRadius: 16,
@@ -190,6 +292,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 4,
     borderBottomColor: "#4a30d4",
+  },
+  primaryBtnDisabled: {
+    opacity: 0.6,
   },
   primaryBtnText: {
     fontFamily: "Poppins-SemiBold",
