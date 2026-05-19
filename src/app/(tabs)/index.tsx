@@ -15,6 +15,7 @@ import { getLanguageByCode } from "@/data/languages";
 import { getUnitsByLanguage } from "@/data/units";
 import { getLessonsByUnit } from "@/data/lessons";
 import { images } from "@/constants/images";
+import { usePostHog } from "posthog-react-native";
 
 const DAILY_GOAL_XP = 20;
 const DAILY_XP = 15;
@@ -33,6 +34,7 @@ const TEACHER_PHOTO_URI = "https://i.pravatar.cc/120?img=47";
 export default function HomeScreen() {
   const { user } = useUser();
   const { selectedLanguage } = useProgressStore();
+  const posthog = usePostHog();
 
   const lang = selectedLanguage ? getLanguageByCode(selectedLanguage) : null;
   const units = selectedLanguage ? getUnitsByLanguage(selectedLanguage) : [];
@@ -130,7 +132,16 @@ export default function HomeScreen() {
               <Text style={styles.continueLabelText}>Continue learning</Text>
               <Text style={styles.continueLanguage}>{lang.name}</Text>
               <Text style={styles.continueUnit}>A1 · {unit.title}</Text>
-              <TouchableOpacity style={styles.continueBtn} activeOpacity={0.85}>
+              <TouchableOpacity
+                style={styles.continueBtn}
+                activeOpacity={0.85}
+                onPress={() =>
+                  posthog.capture("lesson_continued", {
+                    language_code: selectedLanguage,
+                    unit_title: unit.title,
+                  })
+                }
+              >
                 <Text style={styles.continueBtnText}>Continue</Text>
               </TouchableOpacity>
             </View>
@@ -144,7 +155,7 @@ export default function HomeScreen() {
           {/* ── Today's Plan ── */}
           <View>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Today's plan</Text>
+              <Text style={styles.sectionTitle}>{"Today's plan"}</Text>
               <TouchableOpacity activeOpacity={0.7} hitSlop={8}>
                 <Text style={styles.viewAll}>View all</Text>
               </TouchableOpacity>
@@ -198,7 +209,15 @@ export default function HomeScreen() {
                 source={{ uri: TEACHER_PHOTO_URI }}
                 style={styles.teacherPhoto}
               />
-              <TouchableOpacity style={styles.videoCallBtn} activeOpacity={0.85}>
+              <TouchableOpacity
+                style={styles.videoCallBtn}
+                activeOpacity={0.85}
+                onPress={() =>
+                  posthog.capture("ai_video_call_started", {
+                    language_code: selectedLanguage,
+                  })
+                }
+              >
                 <Ionicons name="videocam" size={20} color="#fff" />
               </TouchableOpacity>
             </View>

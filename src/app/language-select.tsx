@@ -1,10 +1,9 @@
 import { images } from "@/constants/images";
 import { languages } from "@/data/languages";
-import type { Language } from "@/types/learning";
+import type { Language, LanguageCode } from "@/types/learning";
 import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import { useProgressStore } from "@/store/useProgressStore";
-import type { LanguageCode } from "@/types/learning";
 import {
   FlatList,
   Image,
@@ -15,6 +14,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { usePostHog } from "posthog-react-native";
 
 // ─── Language Row ─────────────────────────────────────────────────────────────
 
@@ -65,6 +65,7 @@ function LanguageRow({
 export default function LanguageSelectScreen() {
   const router = useRouter();
   const { selectedLanguage, setSelectedLanguage } = useProgressStore();
+  const posthog = usePostHog();
   const [selectedCode, setSelectedCode] = useState<LanguageCode | null>(selectedLanguage);
   const [search, setSearch] = useState("");
 
@@ -76,6 +77,11 @@ export default function LanguageSelectScreen() {
 
   const handleConfirm = () => {
     if (!selectedCode) return;
+    const lang = languages.find((l) => l.code === selectedCode);
+    posthog.capture("language_selected", {
+      language_code: selectedCode,
+      language_name: lang?.name,
+    });
     setSelectedLanguage(selectedCode);
     // Replace so the user cannot press back into language selection from home
     router.replace("/");
