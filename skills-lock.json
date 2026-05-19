@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "agent": {
+      "source": "visionagents.ai",
+      "sourceType": "well-known",
+      "computedHash": "836b0bd26cdbb80a425ecf72e45c23c22f251ae76631231c1dcb9e3c09b68c93"
+    },
     "building-native-ui": {
       "source": "expo/skills",
       "sourceType": "github",

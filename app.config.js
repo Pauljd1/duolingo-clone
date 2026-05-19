@@ -20,6 +20,10 @@ export default {
       },
       predictiveBackGestureEnabled: false,
       package: "com.anonymous.duolingoclone",
+      permissions: [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+      ],
     },
     web: {
       output: "static",

@@ -1,6 +1,12 @@
 import "../../global.css";
 
+import { LogBox } from "react-native";
 import { useEffect, useRef } from "react";
+
+LogBox.ignoreLogs([
+  "`new NativeEventEmitter()` was called with a non-null argument without the required `addListener` method.",
+  "`new NativeEventEmitter()` was called with a non-null argument without the required `removeListeners` method.",
+]);
 import { Stack, usePathname, useGlobalSearchParams } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
