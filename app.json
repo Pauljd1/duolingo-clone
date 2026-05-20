@@ -38,7 +38,24 @@
       ],
       "@clerk/expo",
       "expo-secure-store",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "@stream-io/video-react-native-sdk",
+        {
+          "ios": {
+            "microphoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone for audio lessons with your AI teacher."
+          }
+        }
+      ],
+      "@config-plugins/react-native-webrtc",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
