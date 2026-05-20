@@ -207,9 +207,9 @@ export default function LessonScreen() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <Stack.Screen options={{ headerShown: false }} />
-        <View style={styles.errorContainer}>
+        <View className="flex-1 justify-center items-center gap-3">
           <Ionicons name="alert-circle-outline" size={52} color="#c4b5fd" />
-          <Text style={styles.errorText}>Lesson not found.</Text>
+          <Text className="font-medium text-base text-muted">Lesson not found.</Text>
         </View>
       </SafeAreaView>
     );
@@ -253,87 +253,88 @@ export default function LessonScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View className="flex-row items-center px-4.5 pt-2 pb-3 bg-white">
         <TouchableOpacity
-          style={styles.backBtn}
+          className="p-1"
           onPress={() => router.back()}
           activeOpacity={0.7}
         >
           <Ionicons name="chevron-back" size={26} color="#001328" />
         </TouchableOpacity>
 
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>AI Teacher</Text>
-          <View style={styles.onlineBadge}>
+        <View className="flex-1 pl-2 gap-px">
+          <Text className="font-semibold text-[17px] text-foreground">AI Teacher</Text>
+          <View className="flex-row items-center gap-1">
             <View
-              style={[
-                styles.onlineDot,
-                isError && { backgroundColor: "#ff4d4f" },
-              ]}
+              className={`w-1.75 h-1.75 rounded-full ${isError ? "bg-error" : "bg-amber-400"}`}
             />
-            <Text
-              style={[
-                styles.onlineText,
-                isError && { color: "#ff4d4f" },
-              ]}
-            >
+            <Text className={`font-sans text-xs ${isError ? "text-error" : "text-amber-400"}`}>
               {isError ? "Connection failed" : "Connecting…"}
             </Text>
           </View>
         </View>
 
-        <View style={styles.headerRight} />
+        <View className="flex-row items-center gap-3.5" />
       </View>
 
       {/* ── Teacher Preview Card ── */}
-      <View style={[styles.teacherCard, { justifyContent: "center" }]}>
+      <View
+        className="mx-4.5 rounded-3xl bg-[#f0eeff] overflow-hidden items-center justify-center"
+        style={{ height: CARD_SIZE * 0.82 }}
+      >
         <Image
           source={images.mascot}
-          style={styles.mascotImage}
+          style={{ width: CARD_SIZE * 0.7, height: CARD_SIZE * 0.7, marginBottom: 56 }}
           resizeMode="contain"
         />
 
         {/* Overlay: connecting spinner or error */}
-        <View style={styles.connectingOverlay}>
+        <View
+          className="justify-center items-center bg-[rgba(240,238,255,0.85)]"
+          style={styles.connectingOverlay}
+        >
           {isError ? (
-            <View style={styles.overlayInner}>
+            <View className="items-center gap-3 px-6">
               <Ionicons name="alert-circle" size={36} color="#ff4d4f" />
-              <Text style={styles.overlayText}>{error}</Text>
+              <Text className="font-medium text-sm text-foreground text-center">{error}</Text>
               <TouchableOpacity
-                style={styles.retryBtn}
+                className="mt-1 py-2.5 px-7 rounded-full bg-lingua-purple"
                 onPress={joinCall}
                 activeOpacity={0.8}
               >
-                <Text style={styles.retryBtnText}>Try again</Text>
+                <Text className="font-semibold text-sm text-white">Try again</Text>
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={styles.overlayInner}>
+            <View className="items-center gap-3 px-6">
               <ActivityIndicator size="large" color="#6c4ef5" />
-              <Text style={styles.overlayText}>Connecting to lesson…</Text>
+              <Text className="font-medium text-sm text-foreground text-center">Connecting to lesson…</Text>
             </View>
           )}
         </View>
 
         {/* Speech bubble */}
-        <View style={styles.speechBubble}>
-          <Text style={styles.speechBubbleText} numberOfLines={2}>
+        <View
+          className="absolute bottom-3.5 left-3.5 right-3.5 bg-white/95 rounded-2xl flex-row items-center py-2.5 px-3.5 gap-2.5"
+          style={styles.speechBubble}
+        >
+          <Text className="flex-1 font-medium text-[13px] text-foreground leading-4.75" numberOfLines={2}>
             {bubbleText}
           </Text>
-          <View style={styles.speakerBtn}>
+          <View className="p-0.5">
             <Ionicons name="volume-high" size={20} color="#6c4ef5" />
           </View>
         </View>
       </View>
 
       {/* ── Session Info ── */}
-      <View style={styles.sessionInfo}>
-        <Text style={styles.sessionLang}>
+      <View className="flex-row items-center px-5.5 pt-3 pb-0.5 gap-2">
+        <Text className="font-sans text-sm text-muted">
           {lang.flag}
           {"  "}
           {lang.name}
         </Text>
-        <Text style={styles.sessionTitle} numberOfLines={1}>
+        <Text className="font-semibold text-sm text-foreground flex-1" numberOfLines={1}>
           {lesson.title}
         </Text>
       </View>
@@ -419,56 +420,59 @@ function ConnectedLessonUI({
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View className="flex-row items-center px-4.5 pt-2 pb-3 bg-white">
         <TouchableOpacity
-          style={styles.backBtn}
+          className="p-1"
           onPress={onEndCall}
           activeOpacity={0.7}
         >
           <Ionicons name="chevron-back" size={26} color="#001328" />
         </TouchableOpacity>
 
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>AI Teacher</Text>
+        <View className="flex-1 pl-2 gap-px">
+          <Text className="font-semibold text-[17px] text-foreground">AI Teacher</Text>
           {/* Call status row */}
-          <View style={styles.onlineBadge}>
-            <View style={[styles.onlineDot, { backgroundColor: "#21c16b" }]} />
-            <Text style={[styles.onlineText, { color: "#21c16b" }]}>Live</Text>
-            <View style={styles.headerDivider} />
+          <View className="flex-row items-center gap-1">
+            <View className="w-1.75 h-1.75 rounded-full bg-lingua-green" />
+            <Text className="font-sans text-xs text-lingua-green">Live</Text>
+            <View className="w-px h-2.5 bg-border mx-0.5" />
             {/* Agent status indicator */}
             {agentStatus === "connecting" ? (
               <ActivityIndicator size={10} color="#f59e0b" />
             ) : (
-              <View style={[styles.onlineDot, { backgroundColor: agentDotColor }]} />
+              <View className="w-1.75 h-1.75 rounded-full" style={{ backgroundColor: agentDotColor }} />
             )}
-            <Text style={[styles.onlineText, { color: agentDotColor }]}>
+            <Text className="font-sans text-xs" style={{ color: agentDotColor }}>
               {agentLabel}
             </Text>
           </View>
         </View>
 
-        <View style={styles.headerRight}>
-          <View style={styles.headerIconGroup}>
+        <View className="flex-row items-center gap-3.5">
+          <View className="flex-row items-center gap-1">
             <Ionicons name="people-outline" size={20} color="#001328" />
-            <Text style={styles.headerCount}>{participantCount}</Text>
+            <Text className="font-medium text-[13px] text-foreground">{participantCount}</Text>
           </View>
         </View>
       </View>
 
       {/* ── Teacher Preview Card ── */}
-      <View style={styles.teacherCard}>
+      <View
+        className="mx-4.5 rounded-3xl bg-[#f0eeff] overflow-hidden items-center justify-end"
+        style={{ height: CARD_SIZE * 0.82 }}
+      >
         {/* User camera PIP */}
-        <View style={styles.userPip}>
+        <View className="absolute top-3.5 right-3.5 w-17.5 h-22 rounded-[14px] overflow-hidden border-[2.5px] border-white">
           <Image
             source={{
               uri:
                 userImageUrl ??
                 "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y&s=120",
             }}
-            style={styles.userPipImage}
+            className="w-full h-full"
           />
           {optimisticIsMute && (
-            <View style={styles.mutedPipBadge}>
+            <View className="absolute bottom-1 right-1 w-4.5 h-4.5 rounded-full bg-error justify-center items-center">
               <Ionicons name="mic-off" size={10} color="#fff" />
             </View>
           )}
@@ -477,35 +481,38 @@ function ConnectedLessonUI({
         {/* Mascot */}
         <Image
           source={images.mascot}
-          style={styles.mascotImage}
+          style={{ width: CARD_SIZE * 0.7, height: CARD_SIZE * 0.7, marginBottom: 56 }}
           resizeMode="contain"
         />
 
         {/* Speech bubble */}
-        <View style={styles.speechBubble}>
-          <Text style={styles.speechBubbleText} numberOfLines={2}>
+        <View
+          className="absolute bottom-3.5 left-3.5 right-3.5 bg-white/95 rounded-2xl flex-row items-center py-2.5 px-3.5 gap-2.5"
+          style={styles.speechBubble}
+        >
+          <Text className="flex-1 font-medium text-[13px] text-foreground leading-4.75" numberOfLines={2}>
             {bubbleText}
           </Text>
-          <TouchableOpacity style={styles.speakerBtn} activeOpacity={0.7}>
+          <TouchableOpacity className="p-0.5" activeOpacity={0.7}>
             <Ionicons name="volume-high" size={20} color="#6c4ef5" />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* ── Session Info ── */}
-      <View style={styles.sessionInfo}>
-        <Text style={styles.sessionLang}>
+      <View className="flex-row items-center px-5.5 pt-3 pb-0.5 gap-2">
+        <Text className="font-sans text-sm text-muted">
           {lang.flag}
           {"  "}
           {lang.name}
         </Text>
-        <Text style={styles.sessionTitle} numberOfLines={1}>
+        <Text className="font-semibold text-sm text-foreground flex-1" numberOfLines={1}>
           {lesson.title}
         </Text>
       </View>
 
       {/* ── Controls ── */}
-      <View style={styles.controls}>
+      <View className="flex-row justify-evenly items-center px-4.5 py-4.5">
         <ControlButton
           icon={optimisticIsMute ? "mic-off-outline" : "mic-outline"}
           label={optimisticIsMute ? "Unmute" : "Mute"}
@@ -523,33 +530,33 @@ function ConnectedLessonUI({
 
       {/* Speaking-while-muted hint */}
       {optimisticIsMute && (
-        <View style={styles.mutedBanner}>
+        <View className="mx-4.5 mb-2 bg-error rounded-[10px] flex-row items-center justify-center gap-1.5 py-1.75 px-3.5">
           <Ionicons name="mic-off" size={14} color="#fff" />
-          <Text style={styles.mutedBannerText}>
+          <Text className="font-medium text-xs text-white">
             Your mic is muted — tap Unmute to speak
           </Text>
         </View>
       )}
 
       {/* ── Session Feedback ── */}
-      <View style={styles.feedbackCard}>
-        <View style={styles.feedbackItem}>
-          <Text style={styles.feedbackLabel}>Speaking</Text>
-          <Text style={[styles.feedbackValue, { color: "#21c16b" }]}>
+      <View className="mx-4.5 bg-white rounded-[18px] border border-[#ece9f8] flex-row items-center py-4.5">
+        <View className="flex-1 items-center gap-0.75">
+          <Text className="font-sans text-xs text-gray-400">Speaking</Text>
+          <Text className="font-semibold text-[15px] text-lingua-green">
             Excellent
           </Text>
         </View>
-        <View style={styles.feedbackDivider} />
-        <View style={styles.feedbackItem}>
-          <Text style={styles.feedbackLabel}>Pronunciation</Text>
-          <Text style={[styles.feedbackValue, { color: "#4d88ff" }]}>
+        <View className="w-px h-9.5 bg-[#ece9f8]" />
+        <View className="flex-1 items-center gap-0.75">
+          <Text className="font-sans text-xs text-gray-400">Pronunciation</Text>
+          <Text className="font-semibold text-[15px] text-lingua-blue">
             Great
           </Text>
         </View>
-        <View style={styles.feedbackDivider} />
-        <View style={styles.feedbackItem}>
-          <Text style={styles.feedbackLabel}>Grammar</Text>
-          <Text style={[styles.feedbackValue, { color: "#ff8a00" }]}>
+        <View className="w-px h-9.5 bg-[#ece9f8]" />
+        <View className="flex-1 items-center gap-0.75">
+          <Text className="font-sans text-xs text-gray-400">Grammar</Text>
+          <Text className="font-semibold text-[15px] text-streak">
             Good
           </Text>
         </View>
@@ -577,16 +584,14 @@ function ControlButton({
 }: ControlButtonProps) {
   return (
     <TouchableOpacity
-      style={styles.ctrlWrap}
+      className="items-center gap-1.75"
       onPress={onPress}
       activeOpacity={0.75}
     >
       <View
-        style={[
-          styles.ctrlBtn,
-          isEndCall && styles.ctrlBtnEnd,
-          dimmed && styles.ctrlBtnDimmed,
-        ]}
+        className={`w-15.5 h-15.5 rounded-full justify-center items-center ${
+          isEndCall ? "bg-error" : dimmed ? "bg-gray-400" : "bg-[#2d2d3f]"
+        }`}
       >
         <Ionicons
           name={icon}
@@ -595,7 +600,7 @@ function ControlButton({
           style={isEndCall ? styles.endCallIconRotate : undefined}
         />
       </View>
-      <Text style={styles.ctrlLabel}>{label}</Text>
+      <Text className="font-sans text-[11px] text-muted">{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -611,278 +616,31 @@ function SubtitlesButton({
 }) {
   return (
     <TouchableOpacity
-      style={styles.ctrlWrap}
+      className="items-center gap-1.75"
       onPress={onPress}
       activeOpacity={0.75}
     >
-      <View style={[styles.ctrlBtn, !active && styles.ctrlBtnDimmed]}>
-        <Text style={styles.subtitlesText}>Aa</Text>
+      <View className={`w-15.5 h-15.5 rounded-full justify-center items-center ${!active ? "bg-gray-400" : "bg-[#2d2d3f]"}`}>
+        <Text className="font-bold text-lg text-white">Aa</Text>
       </View>
-      <Text style={styles.ctrlLabel}>Subtitles</Text>
+      <Text className="font-sans text-[11px] text-muted">Subtitles</Text>
     </TouchableOpacity>
   );
 }
 
 // ── Styles ────────────────────────────────────────────────────────────────────
+// Only shadow props, absoluteFillObject, and transform arrays remain here.
 
 const styles = StyleSheet.create({
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 12,
-  },
-  errorText: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 16,
-    color: "#6b7280",
-  },
-
-  // Header
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 18,
-    paddingTop: 8,
-    paddingBottom: 12,
-    backgroundColor: "#fff",
-  },
-  backBtn: { padding: 4 },
-  headerCenter: {
-    flex: 1,
-    paddingLeft: 8,
-    gap: 1,
-  },
-  headerTitle: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 17,
-    color: "#001328",
-  },
-  onlineBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  onlineDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 3.5,
-    backgroundColor: "#f59e0b",
-  },
-  onlineText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 12,
-    color: "#f59e0b",
-  },
-  headerDivider: {
-    width: 1,
-    height: 10,
-    backgroundColor: "#e5e7eb",
-    marginHorizontal: 2,
-  },
-  headerRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-  },
-  headerIconGroup: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  headerCount: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 13,
-    color: "#001328",
-  },
-
-  // Teacher card
-  teacherCard: {
-    marginHorizontal: 18,
-    borderRadius: 24,
-    backgroundColor: "#f0eeff",
-    height: CARD_SIZE * 0.82,
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  userPip: {
-    position: "absolute",
-    top: 14,
-    right: 14,
-    width: 70,
-    height: 88,
-    borderRadius: 14,
-    overflow: "hidden",
-    borderWidth: 2.5,
-    borderColor: "#ffffff",
-  },
-  userPipImage: { width: "100%", height: "100%" },
-  mutedPipBadge: {
-    position: "absolute",
-    bottom: 4,
-    right: 4,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: "#ff4d4f",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  mascotImage: {
-    width: CARD_SIZE * 0.7,
-    height: CARD_SIZE * 0.7,
-    marginBottom: 56,
-  },
   speechBubble: {
-    position: "absolute",
-    bottom: 14,
-    left: 14,
-    right: 14,
-    backgroundColor: "rgba(255,255,255,0.96)",
-    borderRadius: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    gap: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
     elevation: 3,
   },
-  speechBubbleText: {
-    flex: 1,
-    fontFamily: "Poppins-Medium",
-    fontSize: 13,
-    color: "#001328",
-    lineHeight: 19,
-  },
-  speakerBtn: { padding: 2 },
-
-  // Connecting overlay (sits on top of the card during pre-join states)
   connectingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(240,238,255,0.85)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  overlayInner: {
-    alignItems: "center",
-    gap: 12,
-    paddingHorizontal: 24,
-  },
-  overlayText: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 14,
-    color: "#001328",
-    textAlign: "center",
-  },
-  retryBtn: {
-    marginTop: 4,
-    paddingVertical: 10,
-    paddingHorizontal: 28,
-    borderRadius: 50,
-    backgroundColor: "#6c4ef5",
-  },
-  retryBtnText: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 14,
-    color: "#fff",
-  },
-
-  // Session info
-  sessionInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 22,
-    paddingTop: 12,
-    paddingBottom: 2,
-    gap: 8,
-  },
-  sessionLang: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 14,
-    color: "#6b7280",
-  },
-  sessionTitle: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 14,
-    color: "#001328",
-    flex: 1,
-  },
-
-  // Controls
-  controls: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 18,
-  },
-  ctrlWrap: { alignItems: "center", gap: 7 },
-  ctrlBtn: {
-    width: 62,
-    height: 62,
-    borderRadius: 31,
-    backgroundColor: "#2d2d3f",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  ctrlBtnEnd: { backgroundColor: "#ff4d4f" },
-  ctrlBtnDimmed: { backgroundColor: "#9ca3af" },
-  ctrlLabel: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 11,
-    color: "#6b7280",
-  },
-  subtitlesText: {
-    fontFamily: "Poppins-Bold",
-    fontSize: 18,
-    color: "#ffffff",
   },
   endCallIconRotate: { transform: [{ rotate: "135deg" }] },
-
-  // Muted banner
-  mutedBanner: {
-    marginHorizontal: 18,
-    marginBottom: 8,
-    backgroundColor: "#ff4d4f",
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 6,
-    paddingVertical: 7,
-    paddingHorizontal: 14,
-  },
-  mutedBannerText: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 12,
-    color: "#fff",
-  },
-
-  // Feedback
-  feedbackCard: {
-    marginHorizontal: 18,
-    backgroundColor: "#ffffff",
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: "#ece9f8",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 18,
-  },
-  feedbackItem: { flex: 1, alignItems: "center", gap: 3 },
-  feedbackLabel: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 12,
-    color: "#9ca3af",
-  },
-  feedbackValue: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 15,
-  },
-  feedbackDivider: { width: 1, height: 38, backgroundColor: "#ece9f8" },
 });
